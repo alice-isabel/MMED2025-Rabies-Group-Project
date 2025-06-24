@@ -23,3 +23,5 @@ Goals:
 By the end of Day 9, we will have finalised a research question, chosen our parameter values, and debugged our deterministic model.
 
 Then, we will include the variation of vaccination delivery timing.
+
+Then, we will include variations in vaccination delivery timing. 
