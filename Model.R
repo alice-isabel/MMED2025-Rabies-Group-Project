@@ -19,7 +19,7 @@ time <- 0
 
 
 
-N0 <- 1000000
+N0 <- 2316000
 
 
 pop.SI <- c(S = (1-0.02)*N0,
@@ -30,13 +30,13 @@ pop.SI <- c(S = (1-0.02)*N0,
 
 
 values <- c(
-  B = 0.0005,
-  Mu1=0.005,
-  Mu2=0.01,
-  Psi=0.05,
-  Tau=0.1,
-  Lambda=0.49, # be
-  Gamma=0.5, 
+  B = 0.0005, # unknown
+  Mu1=1/(25*30), 
+  Mu2=1/(3.1),
+  Psi=1/(2.5*365),
+  Tau=70/(100*365),
+  Lambda=0.49, # unknown
+  Gamma=1/22.3, 
   N=N0)
 
 
@@ -53,7 +53,7 @@ pop.next
 
 
 library(deSolve)               
-time.out <- seq(0,365,0.1)  
+time.out <- seq(0,365*5,0.1)  
 
 lsoda(
   y = pop.SI,               
@@ -71,14 +71,14 @@ ts.sir <- data.frame(lsoda(
 
 head(ts.sir)
 
-subset(ts.sir,time==365)
+subset(ts.sir,time==365*5)
 
 plot(ts.sir$time,               
      ts.sir$I,                  
      xlab = "Time in days",     
      ylab = "Number infected",  
      main = "Rabies",           
-     xlim = c(0,400),           
+     xlim = c(0,400*5),           
      type = "l",                
      bty = "n")                 
 
