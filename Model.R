@@ -3,12 +3,12 @@ rm(list=ls())
 sir <- function(t,y,parms){
 
   with(c(as.list(y),parms),{
-    dSdT <- -Lambda*S -Tau*S +Psi*V+B*N- Mu1 * S
-    dEdT <- Lambda*S - Gamma*E -Mu1 * E
+    dSdT <- -Lambda*S*I/N -Tau*S +Psi*V+B*N- Mu1 * S
+    dEdT <- Lambda*S*I/N - Gamma*E -Mu1 * E
     dIdT <- Gamma*E-Mu1*I-Mu2*I
     dVdT <- Tau*S - Psi * V - Mu1 * V
     
-    return(list(c(dEdT,dIdT,dSdT,dVdT)))
+    return(list(c(dSdT,dEdT,dIdT,dVdT)))
   })
 }
 
