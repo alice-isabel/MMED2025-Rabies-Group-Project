@@ -3,7 +3,7 @@ rm(list=ls())
 sir <- function(t,y,parms){
   
   with(c(as.list(y),parms),{
-    dSdT <- -Lambda*S*I/N -Tau*S +Psi*V+B*N- Mu1 * S
+    dSdT <- -Lambda*S*I/N -Tau*S +Psi*V+B- Mu1 * S
     dEdT <- Lambda*S*I/N - Gamma*E -Mu1 * E
     dIdT <- Gamma*E-Mu1*I-Mu2*I
     dVdT <- Tau*S - Psi * V - Mu1 * V
@@ -30,7 +30,7 @@ pop.SI <- c(S = (1-0.02)*N0,
 
 
 values <- c(
-  B = 0.0005, # unknown
+  B = 3100, # unknown
   Mu1=1/(25*30), 
   Mu2=1/(3.1),
   Psi=1/(2.5*365),
@@ -80,5 +80,13 @@ plot(ts.sir$time,
      main = "Rabies",           
      xlim = c(0,400*5),           
      type = "l",                
-     bty = "n")                 
+     bty = "n")   
+plot(ts.sir$time,               
+     ts.sir$N,                  
+     xlab = "Time in days",     
+     ylab = "Number of population",  
+     main = "Rabies",           
+     xlim = c(0,400*5),           
+     type = "l",                
+     bty = "n")   
 
