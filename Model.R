@@ -73,12 +73,12 @@ head(ts.sir)
 
 subset(ts.sir,time==365)
 
-plot(ts.sir$time,               # Time on the x axis
-     ts.sir$I,                  # Number infected (I) on the y axis
-     xlab = "Time in days",     # Label the x axis
-     ylab = "Number infected",  # Label the y axis
-     main = "Rabies",           # Plot title
-     xlim = c(0,400),           #
-     type = "l",                # Use a line plot
-     bty = "n")                 # Remove the box around the plot
+plot(ts.sir$time,               
+     ts.sir$I,                  
+     xlab = "Time in days",     
+     ylab = "Number infected",  
+     main = "Rabies",           
+     xlim = c(0,400),           
+     type = "l",                
+     bty = "n")                 
 
