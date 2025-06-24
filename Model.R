@@ -1,7 +1,7 @@
 rm(list=ls())
 
 sir <- function(t,y,parms){
-
+  
   with(c(as.list(y),parms),{
     dSdT <- -Lambda*S*I/N -Tau*S +Psi*V+B*N- Mu1 * S
     dEdT <- Lambda*S*I/N - Gamma*E -Mu1 * E
