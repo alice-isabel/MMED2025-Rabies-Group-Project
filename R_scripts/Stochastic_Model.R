@@ -152,7 +152,7 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
 
 simulate_sir <- function(t_end, y, params) {
  # with(as.list(y), {
-    events <- vector("list", 10000000000)
+    events <- vector("list", 100000000)
     idx<- 1
     count.I2 <- 0
     count.S2 <- 0
