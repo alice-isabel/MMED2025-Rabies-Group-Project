@@ -50,7 +50,7 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
                              "backDeathV",
                              "backDeathE",
                              "backDeathI"
-                             ), 1, prob = rates / total_rate)
+      ), 1, prob = rates / total_rate)
       
       switch(event_type,
              "infect" = {
@@ -128,7 +128,7 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
                count.E <- 0 
                count.V <-0
              }
-             )
+      )
     }
     
     return(data.frame(time = event_time, S = S, I = I, E = E,V=V, count.I = count.I,
@@ -192,15 +192,15 @@ simulate_sir <- function(t_end, y, params) {
 pop <- 2300000      
 # population size
 params <- c(
-   B = 0.003, # unknown
-   Mu1=1/(25*30), 
-   Mu2=1/(3.1),
-   Psi=1/(2.5*365),
-   Tau=70/(100*365),
-   Lambda=0.49, # unknown
-   Gamma=1/22.3, 
-   N=pop
-  )    	# parameter values
+  B = 0.003, # unknown
+  Mu1=1/(25*30), 
+  Mu2=1/(3.1),
+  Psi=1/(2.5*365),
+  Tau=70/(100*365),
+  Lambda=0.49, # unknown
+  Gamma=1/22.3, 
+  N=pop
+)    	# parameter values
 final_time <- 365*1                      	# end time
 y0 <- c(
   S = (1-0.02)*pop,
@@ -310,7 +310,7 @@ plot_sirspill <- function(nTraj = 16, params, final_time, y0){
     scale_x_continuous(breaks = NULL) +
     coord_cartesian(xlim=c(0, final_time)) +
     theme_minimal(base_size = 14)
-
+  
   print(gg)
 }
 
@@ -318,9 +318,9 @@ plot_sirspill <- function(nTraj = 16, params, final_time, y0){
 # 16 trajectories for a set of inputs
 
 plot_sirspill(nTraj=16
-	, params=c(beta = 0.3, gamma = 0.1,lambda = 0.01)
-	, final_time=400
-	, y0 = c(S = pop - 1, I = 1, R = 0)
+              , params=c(beta = 0.3, gamma = 0.1,lambda = 0.01)
+              , final_time=400
+              , y0 = c(S = pop - 1, I = 1, R = 0)
 )
 
 # TASK 2: 
