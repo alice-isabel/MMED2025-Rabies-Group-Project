@@ -151,41 +151,61 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
 
 
 simulate_sir <- function(t_end, y, params) {
-  with(as.list(y), {
+ # with(as.list(y), {
+    events <- vector("list", 10000000000)
+    idx<- 1
     count.I2 <- 0
     count.S2 <- 0
     count.E2 <- 0 
     count.V2 <-0
     
+    # initial state
+    S <- y["S"]
+    E<- y["E"]
+    I<- y["I"]
+    V<- y["V"]
+    
+    time<-0
+    # store inital row
+    events[[idx]]<- c(time, S,E,I,V,0,0,0,0)
+    idx<- idx+1
+    
     # This will be the cumulative count
     
     #count.int initialisation changed. At present, it doesn't include the infection events that seed the outbreak...
-    ts <- data.frame(time = 0, S = S, I = I, E=E,V = V, count.I = 0,
-                     count.S = 0,
-                     count.E = 0,
-                     count.V = 0) 
-    next_event <- ts
-    print(ts)
-    while (next_event$time < t_end) {
-      next_event <- event_sir(next_event$time, S = next_event$S, I = next_event$I, V = next_event$V, E = next_event$E , params, t_end)#JDC: count.inf removed from args
+    # ts <- data.frame(time = 0, S = S, I = I, E=E,V = V, count.I = 0,
+    #                  count.S = 0,
+    #                  count.E = 0,
+    #                  count.V = 0) 
+    # next_event <- ts
+   # print(ts)
+    while (time < t_end && idx<=length(events)) {
+      next_event <- event_sir(time, S, E, I,V, params, t_end)#JDC: count.inf removed from args
+      time <- next_event$time
+      S<- next_event$S
+      E<- next_event$E
+      I<- next_event$I
+      V<- next_event$V
       count.I2 <- count.I2 + next_event$count.I
       count.S2 <- count.S2 + next_event$count.S
       count.E2 <- count.E2 + next_event$count.E
       count.V2 <- count.V2 + next_event$count.V
+      events[[idx]]<- unlist(next_event)
+      idx<- idx+1
       
-      
-      next_event$count.I <- count.I2 # replace with the cumulative version
-      next_event$count.S <- count.S2
-      next_event$count.E <- count.E2
-      next_event$count.V <- count.V2
-      # print(next_event)
-      print(next_event$time)
-      ts <- rbind(ts, next_event)
+       next_event$count.I <- count.I2 # replace with the cumulative version
+       next_event$count.S <- count.S2
+       next_event$count.E <- count.E2
+       next_event$count.V <- count.V2
+     # print(next_event)
+       print(next_event$time)
+      # ts <- rbind(ts, next_event)
     }
-    print(ts)
-    
-    return(ts)
-  })
+    #print(idx)
+    out<- do.call(rbind, events[1:(idx-1)])
+    colnames(out)<- c("time", "S", "E", "I", "V", "count.I", "count.S", "count.E", "count.V")
+    return(as.data.frame(out))
+
 }
 ## Run the model for specified inputs:
 
@@ -225,14 +245,14 @@ ggplot(ts1, aes(x = time, y = count.I)) +
 
 ggplot(ts1, aes(x = time, y = I)) +
   geom_step(color = "red", linewidth = 1.2) +
-  labs(title = "Number of Infectious Individuals Over Time",
+  labs(title = "Number of Infectious Dogs Over Time",
        y = "Infectious Count",
        x = "Time (days)") +
   theme_minimal(base_size = 14)
 
 ggplot(ts1, aes(x = time, y = V)) +
   geom_step(color = "blue", linewidth = 1.2) +
-  labs(title = "Number of Vaccinated Individuals Over Time",
+  labs(title = "Number of Vaccinated Dogs Over Time",
        y = "Vaccinated Count",
        x = "Time (days)") +
   theme_minimal(base_size = 14)
@@ -311,7 +331,7 @@ plot_sirspill <- function(nTraj = 16, params, final_time, y0){
     coord_cartesian(xlim=c(0, final_time)) +
     theme_minimal(base_size = 14)
   
-  print(gg)
+  #print(gg)
 }
 
 # We can now easily now easily plot trajectories - here we plot 
