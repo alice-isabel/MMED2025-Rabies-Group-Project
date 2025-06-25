@@ -1,4 +1,8 @@
 library(tidyverse)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
 
 ?sample
 
@@ -7,12 +11,13 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
   with(as.list(params), {
     N <- S+I+E+V
     
+    
     rates <- c(
       infect = Lambda*S*I/N,
       infectious = Gamma*E,
       vaccinated = Tau*S,
       waned = Psi*V,
-      birth = B,
+      birth = B*N,
       diseasedDeath = Mu2*I,
       backDeathS = Mu1 * S,
       backDeathV = Mu1 * V,
@@ -20,9 +25,10 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
       backDeathI = Mu1 * I
       
     )
+    # print(rates)
     
     total_rate <- sum(rates)
-    
+    # print(total_rate)
     if (total_rate == 0) {
       
       count.I <- 0
@@ -33,7 +39,7 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
       
     } else {
       
-      event_time <- time + rexp(1, total_rate)
+      event_time <- time + rexp(1, total_rate)  
       event_type <- sample(c("infect",
                              "infectious",
                              "vaccinated" ,
@@ -134,6 +140,16 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
 
 ## Function to simulate states from time 0 to t_end:
 
+
+
+
+
+
+
+
+
+
+
 simulate_sir <- function(t_end, y, params) {
   with(as.list(y), {
     count.I2 <- 0
@@ -144,36 +160,39 @@ simulate_sir <- function(t_end, y, params) {
     # This will be the cumulative count
     
     #count.int initialisation changed. At present, it doesn't include the infection events that seed the outbreak...
-    ts <- data.frame(time = 0, S = S, I = I, V = V,E=E, Count.I = 0,
+    ts <- data.frame(time = 0, S = S, I = I, E=E,V = V, count.I = 0,
                      count.S = 0,
                      count.E = 0,
                      count.V = 0) 
     next_event <- ts
-    
+    print(ts)
     while (next_event$time < t_end) {
       next_event <- event_sir(next_event$time, S = next_event$S, I = next_event$I, V = next_event$V, E = next_event$E , params, t_end)#JDC: count.inf removed from args
-      count.I2 <- count.I2 + next_event$count.I2
-      count.S2 <- count.S2 + next_event$count.S2
-      count.E2 <- count.E2 + next_event$count.E2
-      count.V2 <- count.V2 + next_event$count.V2
+      count.I2 <- count.I2 + next_event$count.I
+      count.S2 <- count.S2 + next_event$count.S
+      count.E2 <- count.E2 + next_event$count.E
+      count.V2 <- count.V2 + next_event$count.V
       
       
       next_event$count.I <- count.I2 # replace with the cumulative version
       next_event$count.S <- count.S2
       next_event$count.E <- count.E2
       next_event$count.V <- count.V2
-      
+      # print(next_event)
+      print(next_event$time)
       ts <- rbind(ts, next_event)
     }
+    print(ts)
     
     return(ts)
   })
 }
 ## Run the model for specified inputs:
 
-pop <- 2316000                                 	# population size
+pop <- 2300000      
+# population size
 params <- c(
-   B = 3100, # unknown
+   B = 0.003, # unknown
    Mu1=1/(25*30), 
    Mu2=1/(3.1),
    Psi=1/(2.5*365),
@@ -182,11 +201,11 @@ params <- c(
    Gamma=1/22.3, 
    N=pop
   )    	# parameter values
-final_time <- 400                       	# end time
+final_time <- 365*1                      	# end time
 y0 <- c(
-  S = (1-0.02)*N0,
-  E = (0.01)*N0,
-  I = (0.01)*N0, 
+  S = (1-0.02)*pop,
+  E = (0.01)*pop,
+  I = (0.01)*pop, 
   V=0
 )        	# initial state
 
@@ -194,15 +213,45 @@ ts1 <- simulate_sir(final_time, y0, params)
 
 ## And plot:
 
-ts1_long <- (ts1 
-             |> pivot_longer(cols = c(S, I, R), names_to = "Compartment", values_to = "count")
-             |> mutate(Compartment = factor(Compartment, levels = c('S','I','R')))
-)
 
-ggplot(ts1_long, aes(x = time, y = count, color = Compartment)) +
-  geom_step(linewidth = 1.2) +
-  labs(title = "SIR dynamics without spillover", y = "Count", x = "Time") +
+
+
+ggplot(ts1, aes(x = time, y = count.I)) +
+  geom_step(color = "purple", linewidth = 1.2) +
+  labs(title = "Cumulative New Infections Over Time",
+       y = "Cumulative Infections",
+       x = "Time (days)") +
   theme_minimal(base_size = 14)
+
+ggplot(ts1, aes(x = time, y = I)) +
+  geom_step(color = "red", linewidth = 1.2) +
+  labs(title = "Number of Infectious Individuals Over Time",
+       y = "Infectious Count",
+       x = "Time (days)") +
+  theme_minimal(base_size = 14)
+
+ggplot(ts1, aes(x = time, y = V)) +
+  geom_step(color = "blue", linewidth = 1.2) +
+  labs(title = "Number of Vaccinated Individuals Over Time",
+       y = "Vaccinated Count",
+       x = "Time (days)") +
+  theme_minimal(base_size = 14)
+
+ts1 <- ts1 %>%
+  mutate(Total = S + E + I + V)
+
+ggplot(ts1, aes(x = time, y = Total)) +
+  geom_step(color = "black", linewidth = 1.2) +
+  labs(title = "Total Population Over Time",
+       y = "Population Size",
+       x = "Time (days)") +
+  theme_minimal(base_size = 14)
+
+
+
+
+
+
 
 # Generate the data and produce the plot multiple times, by running the relevant
 # lines above. What do you see?
