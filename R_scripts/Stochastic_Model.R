@@ -246,7 +246,7 @@ ggplot(ts1, aes(x = time, y = count.I)) +
        y = "Cumulative Infections",
        x = "Time (days)") +
   theme_minimal(base_size = 14)
-view(ts1)
+# view(ts1)
 
 ggplot(ts1, aes(x = time, y = I)) +
   geom_step(color = "red", linewidth = 1.2) +
