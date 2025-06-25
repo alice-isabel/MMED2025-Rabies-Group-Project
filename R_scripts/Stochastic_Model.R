@@ -61,7 +61,7 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
                count.S <- 0
                count.E <- 1 
                count.V <-0
-             },
+             }, 
              "infectious" = {
                E <- E - 1
                I <- I + 1

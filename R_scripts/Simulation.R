@@ -7,7 +7,7 @@ getwd()
 source("./R_scripts/Stochastic_Model.R")
 
 run_multiple_sims <- function(n_sim, t_end, y, params, time_step = 1) {
-
+  
   
   
   all_sims <- vector("list", n_sim)
@@ -15,7 +15,7 @@ run_multiple_sims <- function(n_sim, t_end, y, params, time_step = 1) {
   for (i in 1:n_sim) {
     sim_result <- simulate_sir(t_end, y, params)
     
-  
+    
     sim_result$time <- floor(sim_result$time / time_step) * time_step
     sim_result$sim <- i
     
@@ -88,11 +88,11 @@ all_tau_results <- list()
 
 for (tau in tau_values) {
   
-
+  
   params_current <- params
   params_current["Tau"] <- tau
   
-
+  
   avg_res <- run_multiple_sims(
     n_sim = n_sim,
     t_end = final_time,
