@@ -8,7 +8,7 @@ Faculty: Mutono and Martha
 
 Google Drive: https://drive.google.com/drive/folders/1YcdzgUhQ0qEjm6hbez-hP0zxuePdycW7?usp=sharing
 
-############################################## RESEARCH QUESTION ##############################################
+RESEARCH QUESTION
 
 1. What level of vaccination coverage is required to eliminate rabies transmission in the domestic dog population in Tanzania by 2030? 2. How does the effectiveness of continuous dog rabies vaccination compare to periodic mass vaccination campaigns in reducing rabies incidence in Tanzania?
 
@@ -22,7 +22,7 @@ O- Elimination (reduction to zero) of rabies incidence by 2030
 
 ![Model Diagram](Figures/Model_diagram.png)
 
-############################################## PROGRESS ##############################################
+PROGRESS
 
 Day 9 - Tuesday 24 June
 
