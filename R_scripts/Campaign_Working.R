@@ -8,11 +8,9 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
   with(as.list(params), {
     N <- S+I+E+V
     
-    print(time)
-    print(floor(time))
-    print(floor(time)%%365))
+    #print(floor(time)%%365 < 31)
   
-    if ((floor(time)+365)&&365 < 31){
+    if (floor(time)%%365 < 31){
     rates <- c(
       infect = Lambda*S*I/N,
       infectious = Gamma*E,
@@ -29,7 +27,7 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
       rates <- c(
         infect = Lambda*S*I/N,
         infectious = Gamma*E,
-        vaccinated = 0,
+        vaccinated = Tau2*S/365,
         waned = Psi*V,
         birth = B*N,
         diseasedDeath = Mu2*I,
@@ -42,8 +40,7 @@ event_sir <- function(time, S, E, I ,V, params, t_end) { #JDC: count.inf removed
     
     total_rate <- sum(rates)
     # print(total_rate)
-    print(total_rate)
-    print(total_rate==0)
+
     if (total_rate < 10^(-6)) {
       
       count.I <- 0
@@ -219,24 +216,24 @@ simulate_sir <- function(t_end, y, params) {
 }
 ## Run the model for specified inputs:
 
-pop <- 100      
+pop <- 1000     
 # population size
 params <- c(
-  B = 0.003, # unknown
-  Mu1=1/(25*30), 
+  B = 0.001*1.1, # unknown
+  Mu1=0.001, 
   Mu2=1/(3.1),
   Psi=1/(2.5*365),
   Tau=70/100, #time independent vaccination rate
-  Lambda=2, # unknown
+  Lambda=0.49, # unknown
   Gamma=1/22.3, 
   N=pop,
   Tau2=5/100 #off-campaign tau
 )    	# parameter values
-final_time <- 365*1                      	# end time
+final_time <- 365*5                      	# end time
 y0 <- c(
-  S = (1-0.02)*pop,
-  E = (0.01)*pop,
-  I = (0.01)*pop, 
+  S = (1-0.01)*pop,
+  E = (0.005)*pop,
+  I = (0.005)*pop, 
   V=0
 )        	# initial state
 
@@ -269,7 +266,7 @@ ggplot(ts1, aes(x = time, y = I)) +
 
 ggplot(ts1, aes(x = time, y = V)) +
   geom_step(color = "blue", linewidth = 1.2) +
-  labs(title = "Number of Vaccinated Dogs Over Time",
+  labs(title = "Number of Vaccinated Dogs Per Day",
        y = "Vaccinated Count",
        x = "Time (days)") +
   theme_minimal(base_size = 14)
