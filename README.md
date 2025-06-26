@@ -29,16 +29,22 @@ Day 9 - Tuesday 24 June
 By the end of Day 9, we will have finalised a research question, chosen our parameter values, and debugged our deterministic model.
 
 Then, we will include variations in vaccination delivery timing.
+
 Day 10 - Wednesday 25 June 
+
 Our main focus today is to develop a finalised model with which we shall simulate variations in vaccinations. First, the stochastic model needs to be debugged and finalised. While the coding team from yesterday is doing this (Omar, Zizipo, Patience), the literature team from yesterday (Rachel, Alice, Faith) is working on the report and presentations.
 
 We shall split into teams to address the following components:
 
 Incorporating contact rate - Rachel and Faith
+
 Incorporating spillover - Omar and Zizipo
+
 Modelling periodic vaccination - Alice and Patience
 
 We decided to focus on getting a simple version of the model working and opted to increase complexity later if time allows. Working in parallel, we created a function to vary parameters for sensitivity analysis and run multiple functions, as well as creating a version of the code to simulate vaccination campaigns.
+
 Day 11 - Thursday 26 June 
+
 Today we want to obtain final simulation results by incorporating our sensitivity analysis with campaign vaccinations.
 
