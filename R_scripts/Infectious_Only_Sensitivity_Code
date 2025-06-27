@@ -1,0 +1,24 @@
+tau_levels <- sort(unique(combined_tau_results_amended_tau$Tau))
+
+# Define custom goldenrod-like colors (adjust or expand as needed)
+goldenrod_palette <- c("#B8860B","#DAA520",  "#FFD700", "#E1C16E")[1:length(tau_levels)]
+names(goldenrod_palette) <- as.character(tau_levels)
+
+# Define line types (repeat if you have more Tau levels)
+linetypes <- c("solid", "dashed", "dotted", "dotdash")[1:length(tau_levels)]
+names(linetypes) <- as.character(tau_levels)
+
+# Plot
+combined_tau_results_amended_tau %>%
+  filter(Compartment == "I") %>%
+  ggplot(aes(x = time, y = count, 
+             color = as.factor(Tau), 
+             linetype = as.factor(Tau))) +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = goldenrod_palette) +
+  scale_linetype_manual(values = linetypes) +
+  theme_minimal() +
+  labs(title = paste("Average of", n_sim, "Simulations for Different Vaccination Coverages"),
+       x = "Time", y = "Average Count", 
+       color = "Tau", linetype = "Tau") +
+  xlim(c(0, 200))
